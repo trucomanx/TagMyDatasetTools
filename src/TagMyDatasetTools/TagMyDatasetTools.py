@@ -6,7 +6,7 @@ import shutil
 
 import pandas as pd
 
-def read_csv_file_and_move_by_type(csvpath,pathin,filenameout="filename"):
+def dataset_csv_to_dataset_dir(csvpath,pathin,filenameout="filename",output='output'):
     '''
     Lee el archiv CSV en csvpath y lee los archivos relativos (agregando pathin) 
     y su categoria, y ordena los archivos en directorios con el nombre de la categoria 
@@ -30,6 +30,11 @@ def read_csv_file_and_move_by_type(csvpath,pathin,filenameout="filename"):
     if(L==0):
         return;
     
+    try: 
+        os.mkdir(output) 
+    except: 
+        pass
+    
     ID=dict({});
     for n in range(L):
         ID[df[1][n]]=1;
@@ -37,13 +42,13 @@ def read_csv_file_and_move_by_type(csvpath,pathin,filenameout="filename"):
     for n in range(L):
         fileimg=os.path.join(pathin,df[0][n]);
         if(os.path.exists(fileimg)):
-            dirout=os.path.join(pathin,df[1][n]);
+            dirout=os.path.join(output,df[1][n]);
             try: 
                 os.mkdir(dirout) 
             except: 
                 pass
             
-            shutil.move(fileimg,os.path.join(dirout,filenameout+str(ID[df[1][n]])+".png"));
+            shutil.copy(fileimg,os.path.join(dirout,filenameout+str(ID[df[1][n]])+".png"));
             ID[df[1][n]]=ID[df[1][n]]+1;
     return True;
 
